@@ -5,7 +5,7 @@ pub struct State {
 }
 
 impl State {
-    pub fn tick(&mut self) {
+    pub fn tick(&self) {
         *self.cycle.lock() += 1;
     }
 

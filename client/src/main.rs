@@ -1,12 +1,14 @@
-use std::{mem, thread, time::Duration};
+#![deny(unsafe_code)]
 
-use headers::{ShMem, State};
+use std::{thread, time::Duration};
+
+use headers::ShMem;
+
 fn main() -> anyhow::Result<()> {
-    let mmap = ShMem::new()?.mmap;
-    let state_data = &mmap[..State::len()];
-    println!("RAW data: {state_data:?}");
+    let shmem = ShMem::connect()?;
+    println!("RAW data: {shmem:?}");
 
-    let state: &mut State = unsafe { mem::transmute(mmap.as_ptr() as *mut State) };
+    let state = shmem.state();
     let mut last = state.generation();
     loop {
         let generation = state.generation();
