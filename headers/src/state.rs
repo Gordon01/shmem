@@ -1,3 +1,5 @@
+use std::{thread, time::Duration};
+
 #[derive(Default, Debug)]
 #[repr(C)]
 pub struct State {
@@ -7,6 +9,11 @@ pub struct State {
 impl State {
     pub fn tick(&self) {
         *self.cycle.lock() += 1;
+    }
+
+    pub fn long_tick(&self) {
+        let _l = self.cycle.lock();
+        thread::sleep(Duration::from_millis(500));
     }
 
     pub fn generation(&self) -> usize {
